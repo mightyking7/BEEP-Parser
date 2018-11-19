@@ -1,4 +1,8 @@
 
+varTypeD = {}
+varValueD = {}
+labelD = {}
+
 def declareVar:
 
 def printVariables:

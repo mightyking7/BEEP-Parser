@@ -2,6 +2,8 @@
 
 import sys
 import sys.os
+import re
+from p5Dict import declareVar
 
 def main():
 
@@ -20,6 +22,7 @@ def main():
 
         sys.exit(1)
 
+    # get the file name
     filename = argv[1]
 
     if os.path.isfile(filename) == False:
@@ -28,17 +31,38 @@ def main():
 
         sys.exit(1)
 
+   # compile the regular
+    labelRE = re.compile(r'^([a-z]+):')
+    varRE   = re.compile(r'^VAR\s[a-z]+\s([a-z]+)\s([\'"\w]*)')
+
+    # parse the file and store labels and variables
     file = open(filename, 'r')
 
-    while True:
+    fileStr = file.read()
 
-        line = file.readline()
+    for num, line in enumerate(fileStr, 1):
 
-        # check for EOF
-        if line == "":
-            break
+        labelMO = labelRE.match(line) 
+
+        if labelMO != None:
+
+            label = labelMO.group(1)
+
+            labelD[num] = label.upper()
+
+        elif varMO = varRE.match(line) != None:
+
+            var = varMO.group(1)
+
+            varTypeD[]
+
+        else:
+
+
+
+
         
-        
+
 
         
 
