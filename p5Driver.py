@@ -1,13 +1,22 @@
 #! /usr/bin/python
 
 import sys
-import sys.os
+import os
 import re
-from p5Dict import declareVar
 
 def main():
 
-    NUM_ARGS = 2
+    varTypeD = {}   # dictionary for var data type
+
+    varValueD = {}  # dictionary for var value
+
+    labelD = {}     # dictionary for labels
+
+    fileL = []      # lines of file stored as entry in list 
+
+    lineNum = 1     # line number in file
+
+    NUM_ARGS = 2    # number of args in command line
 
     if len(sys.argv) < NUM_ARGS:
 
@@ -23,7 +32,7 @@ def main():
         sys.exit(1)
 
     # get the file name
-    filename = argv[1]
+    filename = sys.argv[1]
 
     if os.path.isfile(filename) == False:
 
@@ -31,46 +40,62 @@ def main():
 
         sys.exit(1)
 
-   # compile the regular
+   # compile the regular expressions
     labelRE = re.compile(r'^([a-z]+):')
-    varRE   = re.compile(r'^VAR\s[a-z]+\s([a-z]+)\s([\'"\w]*)')
+    varRE   = re.compile(r'^VAR\s([a-z]+)\s([a-z]+)\s([\'"\w]*)')
 
-    # parse the file and store labels and variables
+    # parse the file, store labels and variables
     file = open(filename, 'r')
 
-    fileStr = file.read()
+    print("BEEP source code in " + filename + " :")
 
-    for num, line in enumerate(fileStr, 1):
+    while True:
+
+        line = file.readline()
+
+        if line == "":
+            break
 
         labelMO = labelRE.match(line) 
 
         if labelMO != None:
 
-            label = labelMO.group(1)
+            label = labelMO.group(1).upper()
 
-            labelD[num] = label.upper()
+            value = labelD.get(label, None)
 
-        elif varMO = varRE.match(line) != None:
+            if value != None:
+                print("***Error: label " + label + " appears on multiple lines: " + labelD[label] + " and " + num)
 
-            var = varMO.group(1)
-
-            varTypeD[]
+            else:
+                 labelD[label] = lineNum
 
         else:
+            
+            varMO = varRE.match(line)
 
+            if varMO != None:
+                #declareVar(varMO, varTypeD, varValueD)
+                print("Var found")
 
+        fileL.append(line)
 
+        # print line and line number
+        print(lineNum, line)
 
-        
+        lineNum += 1
 
-
-        
+    # print labels and variables
+    print(labelD)
 
 
 '''
 Prints the formated string with the specified arguments and exits the program
 '''
 #def errExit(format, * args):
+
+
+main()
 
         
 
