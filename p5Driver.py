@@ -43,7 +43,7 @@ def main():
         sys.exit(1)
 
    # compile the regular expressions
-    labelRE = re.compile(r'^([a-zA-Z]+):')
+    labelRE = re.compile(r'\s*(\w+):')
     varRE   = re.compile(r'^VAR\s([a-zA-Z]+)\s([a-zA-Z]+)\s"?(.*?)"?$')
 
     # parse the file, store labels and variables
@@ -67,7 +67,7 @@ def main():
             value = labelD.get(label, None)
 
             if value != None:
-                print("***Error: label %s appears on multiple lines: %d and %d" %(label, labelD[label], num) )
+                print("***Error: label %s appears on multiple lines: %d and %d" %(label, labelD[label], lineNum) )
 
             else:
                  labelD[label] = lineNum
