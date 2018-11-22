@@ -3,6 +3,8 @@
 import sys
 import os
 import re
+import pprint
+from p5Dict import declareVar, printLabels, printVariables
 
 def main():
 
@@ -27,7 +29,7 @@ def main():
     elif len(sys.argv) > NUM_ARGS:
 
         #TODO use formated printing
-        print('arguments expected : ' + NUM_ARGS + ', arguments given: ' + len(sys.argv))
+        print('arguments expected : %d, arguments given: %d' %(NUM_ARGS, len(sys.argv)))
 
         sys.exit(1)
 
@@ -36,18 +38,18 @@ def main():
 
     if os.path.isfile(filename) == False:
 
-        print( filename + " is not a file")
+        print("%s is not a file" %(filename))
 
         sys.exit(1)
 
    # compile the regular expressions
-    labelRE = re.compile(r'^([a-z]+):')
-    varRE   = re.compile(r'^VAR\s([a-z]+)\s([a-z]+)\s([\'"\w]*)')
+    labelRE = re.compile(r'^([a-zA-Z]+):')
+    varRE   = re.compile(r'^VAR\s([a-zA-Z]+)\s([a-zA-Z]+)\s"?(.*?)"?$')
 
     # parse the file, store labels and variables
     file = open(filename, 'r')
 
-    print("BEEP source code in " + filename + " :")
+    print("BEEP source code in %s:"%(filename))
 
     while True:
 
@@ -65,7 +67,7 @@ def main():
             value = labelD.get(label, None)
 
             if value != None:
-                print("***Error: label " + label + " appears on multiple lines: " + labelD[label] + " and " + num)
+                print("***Error: label %s appears on multiple lines: %d and %d" %(label, labelD[label], num) )
 
             else:
                  labelD[label] = lineNum
@@ -75,8 +77,7 @@ def main():
             varMO = varRE.match(line)
 
             if varMO != None:
-                #declareVar(varMO, varTypeD, varValueD)
-                print("Var found")
+                declareVar(varMO, varTypeD, varValueD)
 
         fileL.append(line)
 
@@ -86,14 +87,10 @@ def main():
         lineNum += 1
 
     # print labels and variables
-    print(labelD)
 
+    printVariables(varTypeD, varValueD)
 
-'''
-Prints the formated string with the specified arguments and exits the program
-'''
-#def errExit(format, * args):
-
+    printLabels(labelD)
 
 main()
 
